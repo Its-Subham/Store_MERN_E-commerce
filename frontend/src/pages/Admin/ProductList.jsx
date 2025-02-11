@@ -65,8 +65,8 @@ const ProductList = () => {
       toast.error(error?.data?.message || error.error);
     }
   };
-  
 
+  
   return (
     <div className="container xl:mx-[9rem] sm:mx-[0]">
       <div className="flex flex-col md:flex-row">

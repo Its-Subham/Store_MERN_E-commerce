@@ -152,7 +152,7 @@ const AdminProductUpdate = () => {
             )}
 
             <div className="mb-3">
-              <label className="text-white  py-2 px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
+              <label className="text-white  px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
                 {image ? image.name : "Upload Image"}
                 <input
                   type="file"

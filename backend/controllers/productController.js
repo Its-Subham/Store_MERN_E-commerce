@@ -1,7 +1,13 @@
 import asyncHandler from "../middlewares/asyncHandeler.js";
 import Product from "../models/productModal.js";
 
+import express from 'express';
+import formidableMiddleware from 'express-formidable';
 
+const app = express();
+
+// This middleware will parse multipart/form-data and set fields on req.fields
+app.use(formidableMiddleware());
 
 const addProduct = asyncHandler(async (req, res) => {
     try {

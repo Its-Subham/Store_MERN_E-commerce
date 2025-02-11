@@ -43,7 +43,9 @@ const Product = ({ product }) => {
         aria-label={`View details for ${product.name}`}
       >
         <div className="flex m-3 justify-between items-center gap-4">
-          <div className="flex-1 text-lg font-semibold text-gray-900">{product.name}</div>
+          <div className="flex-1 text-lg font-semibold text-gray-900">
+            {product.name.length > 48 ? product.name.substring(0, 48) + "..." : product.name}
+          </div>
           <div className="w-24 h-10 flex items-center justify-center bg-pink-100 text-pink-800 text-sm font-medium px-3 py-1 rounded-full dark:bg-pink-900 dark:text-pink-300 shadow-md whitespace-nowrap">
             ₹ {product.price.toLocaleString("en-IN")}
           </div>
