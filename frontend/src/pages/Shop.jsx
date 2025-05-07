@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
+import { GrPowerReset } from "react-icons/gr";
+import Footer from "./Footer.jsx";
 
 import {
   setCategories,
@@ -152,12 +154,13 @@ const Shop = () => {
             />
           </div>
 
-          <div className="p-5 pt-0">
+          <div className="p-5 pt-0 ">
             <button
-              className="w-full border my-4"
+              className="w-full rounded-md my-4 bg-pink-600 text-white flex items-center justify-center"
               onClick={() => window.location.reload()}
             >
               Reset
+              <GrPowerReset className="ml-2 font-bold" />
             </button>
           </div>
         </div>
@@ -216,6 +219,7 @@ const Shop = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

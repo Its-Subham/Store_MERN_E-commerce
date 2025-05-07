@@ -177,12 +177,15 @@ const ProductDetails = () => {
                                 <FaAngleLeft className="text-2xl" />
                             </button>
                         )}
-                        <div ref={sliderRef} className="flex overflow-x-auto gap-4 no-scrollbar">
+                        <div ref={sliderRef} className="flex overflow-x-auto gap-4 no-scrollbar pb-10">
                             {similarProducts.filter((p) => p._id !== productId).map((p) => (
                                 <div key={p._id} className="border rounded-lg p-2 shadow-md min-w-[230px]">
                                     <Link to={`/product/${p._id}`} target="_blank">
                                         <img src={p.image} alt={p.name} className="w-full h-44 object-contain rounded bg-white" />
-                                        <h3 className="mt-2 font-medium hover:text-blue-400">{p.name}</h3>
+                                        <h3 className="mt-2 font-medium hover:text-blue-400">
+                                            {p.name.length > 48 ? p.name.substring(0, 45) + "..." : p.name}
+
+                                        </h3>
                                         <p className="text-lg font-bold">₹ {p.price}</p>
                                     </Link>
                                 </div>
