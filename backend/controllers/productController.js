@@ -99,6 +99,27 @@ const fetchProducts = asyncHandler(async (req, res) => {
     }
 })
 
+const fetchLatestProducts = asyncHandler(async (req, res) => {
+    try{
+        const pageSize = 6;
+        const keyword = req.query.keyword ? { name: { $regex: req.query.keyword, $options: "i" } } : {};
+
+        const count = await Product.countDocuments({ ...keyword })
+        const products = await Product.find({ ...keyword }).sort({ createdAt: -1 }).limit(pageSize)
+
+        res.json({
+            products,
+            page: 1,
+            pages: Math.ceil(count / pageSize),
+            hasMore: false,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" })
+    }
+});
+
 const fetchProductById = asyncHandler(async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -228,4 +249,4 @@ const filterProducts = asyncHandler(async (req, res) => {
 })  
 
 
-export { addProduct, updateProductDetais, removeProduct, fetchProducts, fetchProductById, fetchAllProducts, fetchSimilarProducts, addProductReview, fetchTopProducts, fetchNewProducts, filterProducts };
+export { addProduct, updateProductDetais, removeProduct, fetchProducts, fetchLatestProducts, fetchProductById, fetchAllProducts, fetchSimilarProducts, addProductReview, fetchTopProducts, fetchNewProducts, filterProducts };

@@ -4,9 +4,11 @@ const router = express.Router()
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 import checkId from '../middlewares/checkId.js'
-import { addProduct, updateProductDetais, removeProduct, fetchProducts, fetchProductById, fetchAllProducts, fetchSimilarProducts, addProductReview, fetchTopProducts, fetchNewProducts, filterProducts } from "../controllers/productController.js";
+import { addProduct, updateProductDetais, removeProduct, fetchProducts, fetchLatestProducts, fetchProductById, fetchAllProducts, fetchSimilarProducts, addProductReview, fetchTopProducts, fetchNewProducts, filterProducts } from "../controllers/productController.js";
 
 router.route("/").get(fetchProducts).post(authenticate, authorizeAdmin, formmidable(), addProduct);
+
+router.route("/latest").get(fetchLatestProducts)
 
 router.route("/allproducts").get(fetchAllProducts)
 
