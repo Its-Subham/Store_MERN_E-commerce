@@ -64,15 +64,15 @@ const Order = () => {
       toast.error(errorMessage);
     }
   };
-  
+
   const paymentVerification = async (data) => {
     // Check if the Razorpay key is available
     // if (!razorpay || !razorpay.key_id) {
     //   toast.error("Payment configuration not loaded. Please try again later.");
     //   return;
     // }
-  
-    
+
+
     const options = {
       key: razorpay.key_id,
       amount: data.amount, // Already in paise, as returned from the create order endpoint
@@ -98,7 +98,7 @@ const Order = () => {
               },
             }
           );
-  
+
           const verifyData = res.data;
           if (verifyData.message) {
             toast.success(verifyData.message);
@@ -129,18 +129,18 @@ const Order = () => {
         paylater: true,
       },
     };
-  
+
     // Create the Razorpay instance and open the checkout
     const rzp1 = new window.Razorpay(options);
     rzp1.open();
-  
+
     // Handle payment failure
     rzp1.on("payment.failed", (response) => {
       console.error("Payment failed:", response.error);
       toast.error("Payment failed. Please try again.");
     });
   };
-  
+
 
   // useEffect(() => {
   //   if (!errorPayPal && !loadingPaPal && paypal.clientId) {
@@ -200,7 +200,7 @@ const Order = () => {
     <Messsage variant="danger">{error.data.message}</Messsage>
   ) : (
     <div className="container flex flex-col items-center">
-      <div className="md:w-2/3 pr-4">
+      <div className="md:w-3/4 pr-4">
         <div className=" gray-300 mt-5 pb-4 mb-5">
           {order.orderItems.length === 0 ? (
             <Messsage>Order is empty</Messsage>
@@ -246,7 +246,7 @@ const Order = () => {
         </div>
       </div>
 
-      <div className="md:w-1/3">
+      <div className="md:w-2/4 flex justify-between items-center">
         <div className="mt-5 border-gray-300 pb-4 mb-4">
           <h2 className="text-xl font-bold mb-2">Shipping</h2>
           <p className="mb-4 mt-4">
@@ -272,65 +272,69 @@ const Order = () => {
             <strong className="text-pink-500">Method:</strong>{" "}
             {order.paymentMethod}
           </p>
+          <div className="mb-5">
+            {order.isPaid ? (
+              <Messsage variant="success">Paid on {order.paidAt}</Messsage>
+            ) : (
+              <Messsage variant="danger">Not paid</Messsage>
+            )}
+          </div>
 
-          {order.isPaid ? (
-            <Messsage variant="success">Paid on {order.paidAt}</Messsage>
-          ) : (
-            <Messsage variant="danger">Not paid</Messsage>
+          {loadingDeliver && <Loader />}
+          {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+            <div>
+              <button
+                type="button"
+                className="bg-pink-500 text-white w-full py-2"
+                onClick={deliverHandler}
+              >
+                Mark As Delivered
+              </button>
+            </div>
           )}
         </div>
 
-        <h2 className="text-xl font-bold mb-2 mt-[3rem]">Order Summary</h2>
-        <div className="flex justify-between mb-2">
-          <span>Items</span>
-          <span>₹ {order.itemsPrice}</span>
-        </div>
-        <div className="flex justify-between mb-2">
-          <span>Shipping</span>
-          <span>₹ {order.shippingPrice}</span>
-        </div>
-        <div className="flex justify-between mb-2">
-          <span>Tax</span>
-          <span>₹ {order.taxPrice}</span>
-        </div>
-        <div className="flex justify-between mb-2">
-          <span>Total</span>
-          <span>₹ {order.totalPrice}</span>
-        </div>
+        <div className="w-1/3 h-fit bg-slate-400 rounded-md px-5">
+          <h2 className="text-xl font-bold mb-2 mt-5">Order Summary</h2>
+          <div className="flex justify-between mb-2 font-bold">
+            <span>Items</span>
+            <span>₹ {order.itemsPrice}</span>
+          </div>
+          <div className="flex justify-between mb-2 font-bold">
+            <span>Shipping</span>
+            <span>₹ {order.shippingPrice}</span>
+          </div>
+          <div className="flex justify-between mb-2 font-bold">
+            <span>Tax</span>
+            <span>₹ {order.taxPrice}</span>
+          </div>
+          <hr className="border-black border-2" />
+          <div className="flex justify-between mb-5 font-bold">
+            <span>Total</span>
+            <span>₹ {order.totalPrice}</span>
+          </div>
 
-        {!order.isPaid && (
-          <div>
-            {loadingPay && <Loader />}{" "}
-            {isPending ? (
-              <Loader />
-            ) : (
-              <div>
-                <button
-                    className={`w-full p-1 h-10 rounded-md mt-4 text-white font-medium flex items-center justify-center bg-pink-500`}
+          {!order.isPaid && (
+            <div>
+              {loadingPay && <Loader />}{" "}
+              {isPending ? (
+                <Loader />
+              ) : (
+                <div>
+                  <button
+                    className={`w-full p-1 h-10 rounded-md mt-4 text-white font-medium flex items-center justify-center bg-pink-500 mb-5`}
                     onClick={razorpayHandler}
                     createOrder={createOrder}
                     onApprove={onApprove}
                     onError={onError}
-                >
+                  >
                     Pay now
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {loadingDeliver && <Loader />}
-        {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-          <div>
-            <button
-              type="button"
-              className="bg-pink-500 text-white w-full py-2"
-              onClick={deliverHandler}
-            >
-              Mark As Delivered
-            </button>
-          </div>
-        )}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
