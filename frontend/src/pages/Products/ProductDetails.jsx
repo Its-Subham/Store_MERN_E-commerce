@@ -132,7 +132,7 @@ const ProductDetails = () => {
                         {/* <h1 className="flex items-center mb-6"><FaStar className="mr-2" /> Reviews: {product.numReviews}</h1> */}
                         <Ratings
                             value={product.rating}
-                            text={`${product.numReviews} reviews`}
+                            text={`${product.numReviews} Reviews`}
                         />
 
                         {/*Services*/}

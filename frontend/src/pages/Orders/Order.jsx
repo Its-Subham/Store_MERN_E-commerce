@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { useSelector } from "react-redux";
@@ -16,6 +16,10 @@ import {
 
 import axios from "axios";
 import { ORDERS_URL } from "../../redux/constants";
+import ProductTabs from "../Products/ProductTabs";
+import {
+  useCreateReviewMutation,
+} from "../../redux/api/productApiSlice";
 
 const Order = () => {
   const { id: orderId } = useParams();
@@ -194,6 +198,34 @@ const Order = () => {
     refetch();
   };
 
+  // Reating and Submit Reviews
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const [createReview, { isLoading: loadingProductReview }] = useCreateReviewMutation();
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      if (!selectedProductId || rating === 0 || comment.trim() === "") {
+        toast.error("Please fill in all fields");
+        return;
+      }
+      // console.log("Submitting review for product ID:", selectedProductId);
+      await createReview({ selectedProductId, rating, comment }).unwrap();
+      refetch();
+      toast.success("Review created successfully");
+      setShowReviewModal(false);
+    } catch (error) {
+      toast.error(error?.data || error.message);
+    }
+  };
+
+
+
+
   return isLoading ? (
     <Loader />
   ) : error ? (
@@ -235,8 +267,24 @@ const Order = () => {
                       <td className="p-2 text-center">{item.qty}</td>
                       <td className="p-2 text-center">{item.price}</td>
                       <td className="p-2 text-center">
-                        $ {(item.qty * item.price).toFixed(2)}
+                        ₹ {(item.qty * item.price).toFixed(2)}
                       </td>
+                      {order.isPaid && order.isDelivered && userInfo._id === order.user._id && (
+                        <td className="p-2 text-center">
+                          <button
+                            onClick={() => {
+                              // console.log(item.product);
+                              setSelectedProductId(item.product);
+                              // console.log("Selected Product ID:", selectedProductId);
+                              setShowReviewModal(true);
+                            }}
+                            className="bg-green-600 text-white py-2 px-4 rounded"
+                          >
+                            Write a Review
+                          </button>
+                        </td>
+                      )}
+
                     </tr>
                   ))}
                 </tbody>
@@ -336,6 +384,27 @@ const Order = () => {
           )}
         </div>
       </div>
+
+
+      {showReviewModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded shadow-md w-full max-w-2xl">     
+            <div ClassName="mt-[5rem] container flex flex-wrap items-start justify-between ml-[10rem]">
+              <ProductTabs
+                loadingProductReview={loadingProductReview}
+                userInfo={userInfo}
+                submitHandler={submitHandler}
+                rating={rating}
+                setRating={setRating}
+                comment={comment}
+                setComment={setComment}
+                setShowReviewModal={setShowReviewModal}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

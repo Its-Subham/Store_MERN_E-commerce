@@ -68,6 +68,11 @@ const orderSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    // isReviewed: {
+    //   type: Boolean,
+    //   required: true,
+    //   default: false,
+    // },
     deliveredAt: {
       type: Date,
     },

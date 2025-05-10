@@ -13,7 +13,8 @@ const ProductTabs = ({
   setRating,
   comment,
   setComment,
-  product,
+  setShowReviewModal,
+  // product,
 }) => {
   const { data, isLoading } = useGetTopProductsQuery();
 
@@ -28,32 +29,31 @@ const ProductTabs = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row">
-      <section className="mr-[5rem]">
+    <div className="mt-5">
+      <section>
         <div
-          className={`flex-1 p-4 cursor-pointer text-lg ${
-            activeTab === 1 ? "font-bold" : ""
-          }`}
+          className={`cursor-pointer text-2xl font-semibold ${activeTab === 1 ? "font-semibold" : ""
+            }`}
           onClick={() => handleTabClick(1)}
         >
           Write Your Review
         </div>
-        <div
+        {/* <div
           className={`flex-1 p-4 cursor-pointer text-lg ${
             activeTab === 2 ? "font-bold" : ""
           }`}
           onClick={() => handleTabClick(2)}
         >
           All Reviews
-        </div>
-        <div
+        </div> */}
+        {/* <div
           className={`flex-1 p-4 cursor-pointer text-lg ${
             activeTab === 3 ? "font-bold" : ""
           }`}
           onClick={() => handleTabClick(3)}
         >
           Related Products
-        </div>
+        </div> */}
       </section>
 
       {/* Second Part */}
@@ -77,9 +77,9 @@ const ProductTabs = ({
                     <option value="">Select</option>
                     <option value="1">Inferior</option>
                     <option value="2">Decent</option>
-                    <option value="3">Great</option>
-                    <option value="4">Excellent</option>
-                    <option value="5">Exceptional</option>
+                    <option value="3">Good</option>
+                    <option value="4">Great</option>
+                    <option value="5">Excellent</option>
                   </select>
                 </div>
 
@@ -97,12 +97,21 @@ const ProductTabs = ({
                     className="p-2 border rounded-lg xl:w-[40rem] text-black"
                   ></textarea>
                 </div>
+
                 <button
                   type="submit"
-                  disabled={loadingProductReview}
+                  disabled={loadingProductReview}                  
                   className="bg-pink-600 text-white py-2 px-4 rounded-lg"
                 >
                   Submit
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowReviewModal(false)}
+                  className="ml-4 bg-gray-400 text-white py-2 px-4 rounded-lg"
+                >
+                  Close
                 </button>
               </form>
             ) : (
@@ -114,7 +123,7 @@ const ProductTabs = ({
         )}
       </section>
 
-      <section>
+      {/* <section>
         {activeTab === 2 && (
           <>
             <div>{product.reviews.length === 0 && <p>No Reviews</p>}</div>
@@ -139,9 +148,9 @@ const ProductTabs = ({
             </div>
           </>
         )}
-      </section>
+      </section> */}
 
-      <section>
+      {/* <section>
         {activeTab === 3 && (
           <section className="ml-[4rem] flex flex-wrap">
             {!data ? (
@@ -155,7 +164,7 @@ const ProductTabs = ({
             )}
           </section>
         )}
-      </section>
+      </section> */}
     </div>
   );
 };
